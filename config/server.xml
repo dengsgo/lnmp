@@ -26,7 +26,7 @@
               maxThreads="1000"
               minSpareThreads="20"
               acceptCount="1000"
-              debug="0"
+              maxHttpHeaderSize="65536"
               disableUploadTimeout="true"
               useBodyEncodingForURI="true"
               enableLookups="false"
