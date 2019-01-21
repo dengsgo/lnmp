@@ -2,11 +2,11 @@
 # Author:  yeho <lj2007331 AT gmail.com>
 # BLOG:  https://blog.linuxeye.cn
 #
-# Notes: OneinStack for CentOS/RadHat 6+ Debian 6+ and Ubuntu 12+
+# Notes: OneinStack for CentOS/RedHat 6+ Debian 7+ and Ubuntu 12+
 #
 # Project home page:
 #       https://oneinstack.com
-#       https://github.com/lj2007331/oneinstack
+#       https://github.com/oneinstack/oneinstack
 
 Install_MySQL80() {
   pushd ${oneinstack_dir}/src > /dev/null
@@ -17,7 +17,7 @@ Install_MySQL80() {
   mkdir -p ${mysql_data_dir};chown mysql.mysql -R ${mysql_data_dir}
 
   if [ "${dbinstallmethod}" == "1" ]; then
-    tar xzf mysql-${mysql80_ver}-linux-glibc2.12-${SYS_BIT_b}.tar.gz
+    tar xJf mysql-${mysql80_ver}-linux-glibc2.12-${SYS_BIT_b}.tar.xz
     mv mysql-${mysql80_ver}-linux-glibc2.12-${SYS_BIT_b}/* ${mysql_install_dir}
     sed -i "s@/usr/local/mysql@${mysql_install_dir}@g" ${mysql_install_dir}/bin/mysqld_safe
   elif [ "${dbinstallmethod}" == "2" ]; then
@@ -64,8 +64,8 @@ Install_MySQL80() {
   sed -i "s@^basedir=.*@basedir=${mysql_install_dir}@" /etc/init.d/mysqld
   sed -i "s@^datadir=.*@datadir=${mysql_data_dir}@" /etc/init.d/mysqld
   chmod +x /etc/init.d/mysqld
-  [ "${OS}" == "CentOS" ] && { chkconfig --add mysqld; chkconfig mysqld on; }
-  [[ "${OS}" =~ ^Ubuntu$|^Debian$ ]] && update-rc.d mysqld defaults
+  [ "${PM}" == 'yum' ] && { chkconfig --add mysqld; chkconfig mysqld on; }
+  [ "${PM}" == 'apt-get' ] && update-rc.d mysqld defaults
   popd
 
   # my.cnf
@@ -210,7 +210,7 @@ EOF
   ${mysql_install_dir}/bin/mysql -uroot -p${dbrootpwd} -e "reset master;"
   rm -rf /etc/ld.so.conf.d/{mysql,mariadb,percona,alisql}*.conf
   [ -e "${mysql_install_dir}/my.cnf" ] && rm -f ${mysql_install_dir}/my.cnf
-  echo "${mysql_install_dir}/lib" > /etc/ld.so.conf.d/mysql.conf
+  echo "${mysql_install_dir}/lib" > /etc/ld.so.conf.d/z-mysql.conf
   ldconfig
   service mysqld stop
 }

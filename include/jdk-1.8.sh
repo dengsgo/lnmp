@@ -2,19 +2,19 @@
 # Author:  yeho <lj2007331 AT gmail.com>
 # BLOG:  https://blog.linuxeye.cn
 #
-# Notes: OneinStack for CentOS/RadHat 6+ Debian 6+ and Ubuntu 12+
+# Notes: OneinStack for CentOS/RedHat 6+ Debian 7+ and Ubuntu 12+
 #
 # Project home page:
 #       https://oneinstack.com
-#       https://github.com/lj2007331/oneinstack
+#       https://github.com/oneinstack/oneinstack
 
-Install-JDK18() {
+Install_JDK18() {
   pushd ${oneinstack_dir}/src > /dev/null
   JDK_FILE="jdk-`echo ${jdk18_ver} | awk -F. '{print $2}'`u`echo ${jdk18_ver} | awk -F_ '{print $NF}'`-linux-${SYS_BIT_j}.tar.gz"
   JAVA_dir=/usr/java
   JDK_NAME="jdk${jdk18_ver}"
   JDK_PATH=${JAVA_dir}/${JDK_NAME}
-  [ "${OS}" == 'CentOS' ] && [ -n "`rpm -qa | grep jdk`" ] && rpm -e `rpm -qa | grep jdk`
+  [ "${PM}" == 'yum' ] && [ -n "`rpm -qa | grep jdk`" ] && rpm -e `rpm -qa | grep jdk`
   [ ! -e ${JAVA_dir} ] && mkdir -p ${JAVA_dir}
   tar xzf ${JDK_FILE} -C ${JAVA_dir}
   if [ -d "${JDK_PATH}" ]; then
