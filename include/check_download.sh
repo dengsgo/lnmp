@@ -70,7 +70,6 @@ checkDownload() {
     1)
       echo "Download tomcat 9..."
       src_url=http://mirrors.linuxeye.com/apache/tomcat/v${tomcat9_ver}/apache-tomcat-${tomcat9_ver}.tar.gz && Download_src
-      src_url=http://mirrors.linuxeye.com/apache/tomcat/v${tomcat9_ver}/catalina-jmx-remote.jar && Download_src
       ;;
     2)
       echo "Download tomcat 8..."
@@ -116,6 +115,7 @@ checkDownload() {
 
   if [[ "${db_option}" =~ ^[1-9]$|^1[0-5]$ ]]; then
     if [[ "${db_option}" =~ ^[1,2,5,6,9]$|^10$ ]] && [ "${dbinstallmethod}" == "2" ]; then
+      [ "${db_option}" == '9' ] && boost_ver=1.67.0
       [[ "${db_option}" =~ ^[2,5,6]$|^10$ ]] && boost_ver=${boost_oldver}
       echo "Download boost..."
       [ "${IPADDR_COUNTRY}"x == "CN"x ] && DOWN_ADDR_BOOST=${mirrorLink} || DOWN_ADDR_BOOST=http://downloads.sourceforge.net/project/boost/boost/${boost_ver}
@@ -127,9 +127,9 @@ checkDownload() {
       1)
         # MySQL 8.0
         if [ "${IPADDR_COUNTRY}"x == "CN"x ]; then
-          DOWN_ADDR_MYSQL=http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-8.0
-          DOWN_ADDR_MYSQL_BK=http://mirrors.huaweicloud.com/repository/toolkit/mysql/Downloads/MySQL-8.0
-          DOWN_ADDR_MYSQL_BK2=http://mirrors.tuna.tsinghua.edu.cn/mysql/downloads/MySQL-8.0
+          DOWN_ADDR_MYSQL=http://mirrors.tuna.tsinghua.edu.cn/mysql/downloads/MySQL-8.0
+          DOWN_ADDR_MYSQL_BK=http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-8.0
+          DOWN_ADDR_MYSQL_BK2=http://mirrors.huaweicloud.com/repository/toolkit/mysql/Downloads/MySQL-8.0
         else
           DOWN_ADDR_MYSQL=http://cdn.mysql.com/Downloads/MySQL-8.0
           DOWN_ADDR_MYSQL_BK=http://mysql.he.net/Downloads/MySQL-8.0
@@ -162,9 +162,9 @@ checkDownload() {
       2)
         # MySQL 5.7
         if [ "${IPADDR_COUNTRY}"x == "CN"x ]; then
-          DOWN_ADDR_MYSQL=http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7
-          DOWN_ADDR_MYSQL_BK=http://mirrors.huaweicloud.com/repository/toolkit/mysql/Downloads/MySQL-5.7
-          DOWN_ADDR_MYSQL_BK2=http://mirrors.tuna.tsinghua.edu.cn/mysql/downloads/MySQL-5.7
+          DOWN_ADDR_MYSQL=http://mirrors.tuna.tsinghua.edu.cn/mysql/downloads/MySQL-5.7
+          DOWN_ADDR_MYSQL_BK=http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7
+          DOWN_ADDR_MYSQL_BK2=http://mirrors.huaweicloud.com/repository/toolkit/mysql/Downloads/MySQL-5.7
         else
           DOWN_ADDR_MYSQL=http://cdn.mysql.com/Downloads/MySQL-5.7
           DOWN_ADDR_MYSQL_BK=http://mysql.he.net/Downloads/MySQL-5.7
@@ -197,9 +197,9 @@ checkDownload() {
       3)
         # MySQL 5.6
         if [ "${IPADDR_COUNTRY}"x == "CN"x ]; then
-          DOWN_ADDR_MYSQL=http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.6
-          DOWN_ADDR_MYSQL_BK=http://mirrors.huaweicloud.com/repository/toolkit/mysql/Downloads/MySQL-5.6
-          DOWN_ADDR_MYSQL_BK2=http://mirrors.tuna.tsinghua.edu.cn/mysql/downloads/MySQL-5.6
+          DOWN_ADDR_MYSQL=http://mirrors.tuna.tsinghua.edu.cn/mysql/downloads/MySQL-5.6
+          DOWN_ADDR_MYSQL_BK=http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.6
+          DOWN_ADDR_MYSQL_BK2=http://mirrors.huaweicloud.com/repository/toolkit/mysql/Downloads/MySQL-5.6
         else
           DOWN_ADDR_MYSQL=http://cdn.mysql.com/Downloads/MySQL-5.6
           DOWN_ADDR_MYSQL_BK=http://mysql.he.net/Downloads/MySQL-5.6
@@ -232,9 +232,9 @@ checkDownload() {
       4)
         # MySQL 5.5
         if [ "${IPADDR_COUNTRY}"x == "CN"x ]; then
-          DOWN_ADDR_MYSQL=http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.5
-          DOWN_ADDR_MYSQL_BK=http://mirrors.huaweicloud.com/repository/toolkit/mysql/Downloads/MySQL-5.5
-          DOWN_ADDR_MYSQL_BK2=http://mirrors.tuna.tsinghua.edu.cn/mysql/downloads/MySQL-5.5
+          DOWN_ADDR_MYSQL=http://mirrors.tuna.tsinghua.edu.cn/mysql/downloads/MySQL-5.5
+          DOWN_ADDR_MYSQL_BK=http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.5
+          DOWN_ADDR_MYSQL_BK2=http://mirrors.huaweicloud.com/repository/toolkit/mysql/Downloads/MySQL-5.5
         else
           DOWN_ADDR_MYSQL=http://cdn.mysql.com/Downloads/MySQL-5.5
           DOWN_ADDR_MYSQL_BK=http://mysql.he.net/Downloads/MySQL-5.5
@@ -380,26 +380,26 @@ checkDownload() {
         fi
         ;;
       8)
-        # MariaDB 10.0
+        # MariaDB 5.5
         if [ "${dbinstallmethod}" == '1' ]; then
-          echo "Download MariaDB 10.0 binary package..."
-          FILE_NAME=mariadb-${mariadb100_ver}-${GLIBC_FLAG}-${SYS_BIT_b}.tar.gz
+          echo "Download MariaDB 5.5 binary package..."
+          FILE_NAME=mariadb-${mariadb55_ver}-${GLIBC_FLAG}-${SYS_BIT_b}.tar.gz
           if [ "${IPADDR_COUNTRY}"x == "CN"x ]; then
-            DOWN_ADDR_MARIADB=http://mirrors.tuna.tsinghua.edu.cn/mariadb/mariadb-${mariadb100_ver}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}
-            DOWN_ADDR_MARIADB_BK=http://mirrors.ustc.edu.cn/mariadb/mariadb-${mariadb100_ver}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}
+            DOWN_ADDR_MARIADB=http://mirrors.tuna.tsinghua.edu.cn/mariadb/mariadb-${mariadb55_ver}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}
+            DOWN_ADDR_MARIADB_BK=http://mirrors.ustc.edu.cn/mariadb/mariadb-${mariadb55_ver}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}
           else
-            DOWN_ADDR_MARIADB=http://ftp.osuosl.org/pub/mariadb/mariadb-${mariadb100_ver}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}
-            DOWN_ADDR_MARIADB_BK=http://mirror.nodesdirect.com/mariadb/mariadb-${mariadb100_ver}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}
+            DOWN_ADDR_MARIADB=http://ftp.osuosl.org/pub/mariadb/mariadb-${mariadb55_ver}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}
+            DOWN_ADDR_MARIADB_BK=http://mirror.nodesdirect.com/mariadb/mariadb-${mariadb55_ver}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}
           fi
         elif [ "${dbinstallmethod}" == '2' ]; then
-          echo "Download MariaDB 10.0 source package..."
-          FILE_NAME=mariadb-${mariadb100_ver}.tar.gz
+          echo "Download MariaDB 5.5 source package..."
+          FILE_NAME=mariadb-${mariadb55_ver}.tar.gz
           if [ "${IPADDR_COUNTRY}"x == "CN"x ]; then
-            DOWN_ADDR_MARIADB=http://mirrors.tuna.tsinghua.edu.cn/mariadb/mariadb-${mariadb100_ver}/source
-            DOWN_ADDR_MARIADB_BK=http://mirrors.ustc.edu.cn/mariadb/mariadb-${mariadb100_ver}/source
+            DOWN_ADDR_MARIADB=http://mirrors.tuna.tsinghua.edu.cn/mariadb/mariadb-${mariadb55_ver}/source
+            DOWN_ADDR_MARIADB_BK=http://mirrors.ustc.edu.cn/mariadb/mariadb-${mariadb55_ver}/source
           else
-            DOWN_ADDR_MARIADB=http://ftp.osuosl.org/pub/mariadb/mariadb-${mariadb100_ver}/source
-            DOWN_ADDR_MARIADB_BK=http://mirror.nodesdirect.com/mariadb/mariadb-${mariadb100_ver}/source
+            DOWN_ADDR_MARIADB=http://ftp.osuosl.org/pub/mariadb/mariadb-${mariadb55_ver}/source
+            DOWN_ADDR_MARIADB_BK=http://mirror.nodesdirect.com/mariadb/mariadb-${mariadb55_ver}/source
           fi
         fi
         src_url=${DOWN_ADDR_MARIADB}/${FILE_NAME} && Download_src
@@ -629,33 +629,33 @@ checkDownload() {
       # php 5.3
       src_url=${mirrorLink}/debian_patches_disable_SSLv2_for_openssl_1_0_0.patch && Download_src
       src_url=${mirrorLink}/php5.3patch && Download_src
-      src_url=http://www.php.net/distributions/php-${php53_ver}.tar.gz && Download_src
+      src_url=https://secure.php.net/distributions/php-${php53_ver}.tar.gz && Download_src
       src_url=${mirrorLink}/fpm-race-condition.patch && Download_src
       ;;
     2)
-      src_url=http://www.php.net/distributions/php-${php54_ver}.tar.gz && Download_src
+      src_url=https://secure.php.net/distributions/php-${php54_ver}.tar.gz && Download_src
       src_url=${mirrorLink}/fpm-race-condition.patch && Download_src
       ;;
     3)
-      src_url=http://www.php.net/distributions/php-${php55_ver}.tar.gz && Download_src
+      src_url=https://secure.php.net/distributions/php-${php55_ver}.tar.gz && Download_src
       src_url=${mirrorLink}/fpm-race-condition.patch && Download_src
       ;;
     4)
-      src_url=http://www.php.net/distributions/php-${php56_ver}.tar.gz && Download_src
+      src_url=https://secure.php.net/distributions/php-${php56_ver}.tar.gz && Download_src
       ;;
     5)
-      src_url=http://www.php.net/distributions/php-${php70_ver}.tar.gz && Download_src
+      src_url=https://secure.php.net/distributions/php-${php70_ver}.tar.gz && Download_src
       ;;
     6)
-      src_url=http://www.php.net/distributions/php-${php71_ver}.tar.gz && Download_src
+      src_url=https://secure.php.net/distributions/php-${php71_ver}.tar.gz && Download_src
       ;;
     7)
-      src_url=http://www.php.net/distributions/php-${php72_ver}.tar.gz && Download_src
+      src_url=https://secure.php.net/distributions/php-${php72_ver}.tar.gz && Download_src
       src_url=http://mirrors.linuxeye.com/oneinstack/src/argon2-${argon2_ver}.tar.gz && Download_src
       src_url=http://mirrors.linuxeye.com/oneinstack/src/libsodium-${libsodium_ver}.tar.gz && Download_src
       ;;
     8)
-      src_url=http://www.php.net/distributions/php-${php73_ver}.tar.gz && Download_src
+      src_url=https://secure.php.net/distributions/php-${php73_ver}.tar.gz && Download_src
       src_url=http://mirrors.linuxeye.com/oneinstack/src/argon2-${argon2_ver}.tar.gz && Download_src
       src_url=http://mirrors.linuxeye.com/oneinstack/src/libsodium-${libsodium_ver}.tar.gz && Download_src
       ;;

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Author:  yeho <lj2007331 AT gmail.com>
-# BLOG:  https://blog.linuxeye.cn
+# BLOG:  https://linuxeye.com
 #
 # Notes: OneinStack for CentOS/RedHat 6+ Debian 7+ and Ubuntu 12+
 #
@@ -10,9 +10,9 @@
 
 Install_PHP73() {
   pushd ${oneinstack_dir}/src > /dev/null
-  if [ -e "${apache_install_dir}/bin/apachectl" ];then
-    [ "$(${apache_install_dir}/bin/apachectl -v | awk -F'.' /version/'{print $2}')" == '4' ] && Apache_main_ver=24
-    [ "$(${apache_install_dir}/bin/apachectl -v | awk -F'.' /version/'{print $2}')" == '2' ] && Apache_main_ver=22
+  if [ -e "${apache_install_dir}/bin/httpd" ];then
+    [ "$(${apache_install_dir}/bin/httpd -v | awk -F'.' /version/'{print $2}')" == '4' ] && Apache_main_ver=24
+    [ "$(${apache_install_dir}/bin/httpd -v | awk -F'.' /version/'{print $2}')" == '2' ] && Apache_main_ver=22
   fi
   if [ ! -e "/usr/local/lib/libiconv.la" ]; then
     tar xzf libiconv-${libiconv_ver}.tar.gz
@@ -79,7 +79,6 @@ Install_PHP73() {
   tar xzf php-${php73_ver}.tar.gz
   pushd php-${php73_ver} > /dev/null
   make clean
-  ./buildconf
   [ ! -d "${php_install_dir}" ] && mkdir -p ${php_install_dir}
   [ "${phpcache_option}" == '1' ] && phpcache_arg='--enable-opcache' || phpcache_arg='--disable-opcache'
   if [ "${apache_option}" == '2' ] || [ "${Apache_main_ver}" == '22' ] || [ "${apache_mode_option}" == '2' ]; then
