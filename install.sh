@@ -54,8 +54,8 @@ Show_Help() {
   --mphp_addons               Only install another PHP addons
   --phpcache_option [1-4]     Install PHP opcode cache, default: 1 opcache
   --php_extensions [ext name] Install PHP extensions, include zendguardloader,ioncube,
-                              sourceguardian,imagick,gmagick,fileinfo,imap,ldap,phalcon,
-                              redis,memcached,memcache,mongodb,swoole,xdebug
+                              sourceguardian,imagick,gmagick,fileinfo,imap,ldap,calendar,phalcon,
+                              yaf,yar,redis,memcached,memcache,mongodb,swoole,xdebug
   --tomcat_option [1-4]       Install Tomcat version
   --jdk_option [1-4]          Install JDK version
   --db_option [1-15]          Install DB version
@@ -130,7 +130,10 @@ while :; do
       [ -n "`echo ${php_extensions} | grep -w fileinfo`" ] && pecl_fileinfo=1
       [ -n "`echo ${php_extensions} | grep -w imap`" ] && pecl_imap=1
       [ -n "`echo ${php_extensions} | grep -w ldap`" ] && pecl_ldap=1
+      [ -n "`echo ${php_extensions} | grep -w calendar`" ] && pecl_calendar=1
       [ -n "`echo ${php_extensions} | grep -w phalcon`" ] && pecl_phalcon=1
+      [ -n "`echo ${php_extensions} | grep -w yaf`" ] && pecl_yaf=1
+      [ -n "`echo ${php_extensions} | grep -w yar`" ] && pecl_yar=1
       [ -n "`echo ${php_extensions} | grep -w redis`" ] && pecl_redis=1
       [ -n "`echo ${php_extensions} | grep -w memcached`" ] && pecl_memcached=1
       [ -n "`echo ${php_extensions} | grep -w memcache`" ] && pecl_memcache=1
@@ -209,10 +212,6 @@ while :; do
       ;;
   esac
 done
-
-[ ! -e "${wwwroot_dir}/default" ] && mkdir -p ${wwwroot_dir}/default
-[ ! -e "${wwwlogs_dir}" ] && mkdir -p ${wwwlogs_dir}
-[ -d /data ] && chmod 755 /data
 
 # Use default SSH port 22. If you use another SSH port on your server
 if [ -e "/etc/ssh/sshd_config" ]; then
@@ -625,24 +624,25 @@ if [ ${ARG_NUM} == 0 ]; then
       echo -e "\t${CMSG} 7${CEND}. Install imap"
       echo -e "\t${CMSG} 8${CEND}. Install ldap"
       echo -e "\t${CMSG} 9${CEND}. Install phalcon(PHP>=5.5)"
-      echo -e "\t${CMSG}10${CEND}. Install redis"
-      echo -e "\t${CMSG}11${CEND}. Install memcached"
-      echo -e "\t${CMSG}12${CEND}. Install memcache"
-      echo -e "\t${CMSG}13${CEND}. Install mongodb"
-      echo -e "\t${CMSG}14${CEND}. Install swoole"
-      echo -e "\t${CMSG}15${CEND}. Install xdebug(PHP>=5.5)"
-      read -e -p "Please input numbers:(Default '4 10 11' press Enter) " phpext_option
-      phpext_option=${phpext_option:-'4 10 11'}
+      echo -e "\t${CMSG}10${CEND}. Install yaf(PHP>=7.0)"
+      echo -e "\t${CMSG}11${CEND}. Install redis"
+      echo -e "\t${CMSG}12${CEND}. Install memcached"
+      echo -e "\t${CMSG}13${CEND}. Install memcache"
+      echo -e "\t${CMSG}14${CEND}. Install mongodb"
+      echo -e "\t${CMSG}15${CEND}. Install swoole"
+      echo -e "\t${CMSG}16${CEND}. Install xdebug(PHP>=5.5)"
+      read -e -p "Please input numbers:(Default '4 11 12' press Enter) " phpext_option
+      phpext_option=${phpext_option:-'4 11 12'}
       [ "${phpext_option}" == '0' ] && break
       array_phpext=(${phpext_option})
-      array_all=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)
+      array_all=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16)
       for v in ${array_phpext[@]}
       do
         [ -z "`echo ${array_all[@]} | grep -w ${v}`" ] && phpext_flag=1
       done
       if [ "${phpext_flag}" == '1' ]; then
         unset phpext_flag
-        echo; echo "${CWARNING}input error! Please only input number 4 10 11 and so on${CEND}"; echo
+        echo; echo "${CWARNING}input error! Please only input number 4 11 12 and so on${CEND}"; echo
         continue
       else
         [ -n "`echo ${array_phpext[@]} | grep -w 1`" ] && pecl_zendguardloader=1
@@ -654,12 +654,13 @@ if [ ${ARG_NUM} == 0 ]; then
         [ -n "`echo ${array_phpext[@]} | grep -w 7`" ] && pecl_imap=1
         [ -n "`echo ${array_phpext[@]} | grep -w 8`" ] && pecl_ldap=1
         [ -n "`echo ${array_phpext[@]} | grep -w 9`" ] && pecl_phalcon=1
-        [ -n "`echo ${array_phpext[@]} | grep -w 10`" ] && pecl_redis=1
-        [ -n "`echo ${array_phpext[@]} | grep -w 11`" ] && pecl_memcached=1
-        [ -n "`echo ${array_phpext[@]} | grep -w 12`" ] && pecl_memcache=1
-        [ -n "`echo ${array_phpext[@]} | grep -w 13`" ] && pecl_mongodb=1
-        [ -n "`echo ${array_phpext[@]} | grep -w 14`" ] && pecl_swoole=1
-        [ -n "`echo ${array_phpext[@]} | grep -w 15`" ] && pecl_xdebug=1
+        [ -n "`echo ${array_phpext[@]} | grep -w 10`" ] && pecl_yaf=1
+        [ -n "`echo ${array_phpext[@]} | grep -w 11`" ] && pecl_redis=1
+        [ -n "`echo ${array_phpext[@]} | grep -w 12`" ] && pecl_memcached=1
+        [ -n "`echo ${array_phpext[@]} | grep -w 13`" ] && pecl_memcache=1
+        [ -n "`echo ${array_phpext[@]} | grep -w 14`" ] && pecl_mongodb=1
+        [ -n "`echo ${array_phpext[@]} | grep -w 15`" ] && pecl_swoole=1
+        [ -n "`echo ${array_phpext[@]} | grep -w 16`" ] && pecl_xdebug=1
         break
       fi
     done
@@ -732,6 +733,12 @@ if [ ${ARG_NUM} == 0 ]; then
     fi
   done
 fi
+
+if [[ ${nginx_option} =~ ^[1-3]$ ]] || [[ ${apache_option} =~ ^[1-2]$ ]] || [[ ${tomcat_option} =~ ^[1-4]$ ]]; then
+  [ ! -d ${wwwroot_dir}/default ] && mkdir -p ${wwwroot_dir}/default
+  [ ! -d ${wwwlogs_dir} ] && mkdir -p ${wwwlogs_dir}
+fi
+[ -d /data ] && chmod 755 /data
 
 # install wget gcc curl python
 if [ ! -e ~/.oneinstack ]; then
@@ -992,10 +999,28 @@ PHP_addons() {
     Install_pecl_ldap 2>&1 | tee -a ${oneinstack_dir}/install.log
   fi
 
+  # calendar
+  if [ "${pecl_calendar}" == '1' ]; then
+    . include/pecl_calendar.sh
+    Install_pecl_calendar 2>&1 | tee -a ${oneinstack_dir}/install.log
+  fi
+
   # phalcon
   if [ "${pecl_phalcon}" == '1' ]; then
     . include/pecl_phalcon.sh
     Install_pecl_phalcon 2>&1 | tee -a ${oneinstack_dir}/install.log
+  fi
+
+  # yaf
+  if [ "${pecl_yaf}" == '1' ]; then
+    . include/pecl_yaf.sh
+    Install_pecl_yaf 2>&1 | tee -a ${oneinstack_dir}/install.log
+  fi
+
+  # yar
+  if [ "${pecl_yar}" == '1' ]; then
+    . include/pecl_yar.sh
+    Install_pecl_yar 2>&1 | tee -a ${oneinstack_dir}/install.log
   fi
 
   # pecl_memcached
@@ -1114,11 +1139,9 @@ if [ "${memcached_flag}" == 'y' ]; then
 fi
 
 # index example
-if [ ! -e "${wwwroot_dir}/default/index.html" ]; then
-  if [[ ${nginx_option} =~ ^[1-3]$ ]] || [[ ${apache_option} =~ ^[1-2]$ ]] || [[ ${tomcat_option} =~ ^[1-4]$ ]]; then
-    . include/demo.sh
-    DEMO 2>&1 | tee -a ${oneinstack_dir}/install.log
-  fi
+if [ -d "${wwwroot_dir}/default" ]; then
+  . include/demo.sh
+  DEMO 2>&1 | tee -a ${oneinstack_dir}/install.log
 fi
 
 # get web_install_dir and db_install_dir
@@ -1141,8 +1164,8 @@ fi
 [ -d "${db_install_dir}/support-files" ] && [ -z "`ps -ef | grep mysqld_safe | grep -v grep`" ] && service mysqld start
 
 # reload php
-[ -e "${php_install_dir}/sbin/php-fpm" ] && service php-fpm reload
-[ -e "${php_install_dir}${mphp_ver}/sbin/php-fpm" ] && service php${mphp_ver}-fpm reload
+[ -e "${php_install_dir}/sbin/php-fpm" ] && { [ -e "/bin/systemctl" ] && systemctl reload php-fpm || service php-fpm reload; }
+[ -n "${mphp_ver}" -a -e "${php_install_dir}${mphp_ver}/sbin/php-fpm" ] && { [ -e "/bin/systemctl" ] && systemctl reload php${mphp_ver}-fpm || service php${mphp_ver}-fpm reload; }
 [ -e "${apache_install_dir}/bin/apachectl" ] && ${apache_install_dir}/bin/apachectl -k graceful
 
 endTime=`date +%s`

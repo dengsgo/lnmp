@@ -115,7 +115,6 @@ checkDownload() {
 
   if [[ "${db_option}" =~ ^[1-9]$|^1[0-5]$ ]]; then
     if [[ "${db_option}" =~ ^[1,2,5,6,9]$|^10$ ]] && [ "${dbinstallmethod}" == "2" ]; then
-      [ "${db_option}" == '9' ] && boost_ver=1.67.0
       [[ "${db_option}" =~ ^[2,5,6]$|^10$ ]] && boost_ver=${boost_oldver}
       echo "Download boost..."
       [ "${IPADDR_COUNTRY}"x == "CN"x ] && DOWN_ADDR_BOOST=${mirrorLink} || DOWN_ADDR_BOOST=http://downloads.sourceforge.net/project/boost/boost/${boost_ver}
@@ -842,6 +841,11 @@ checkDownload() {
 
       echo "Download htop for CentOS..."
       src_url=http://hisham.hm/htop/releases/${htop_ver}/htop-${htop_ver}.tar.gz && Download_src
+    fi
+
+    if [ "${CentOS_ver}" == '6' ]; then
+      echo "Download autoconf rpm for CentOS6..."
+      src_url=${mirrorLink}/autoconf-2.69-12.2.noarch.rpm && Download_src
     fi
 
     if [[ "${Ubuntu_ver}" =~ ^14$|^15$ ]]; then
