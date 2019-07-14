@@ -2,7 +2,7 @@
 # Author:  yeho <lj2007331 AT gmail.com>
 # BLOG:  https://linuxeye.com
 #
-# Notes: OneinStack for CentOS/RedHat 6+ Debian 7+ and Ubuntu 12+
+# Notes: OneinStack for CentOS/RedHat 6+ Debian 8+ and Ubuntu 14+
 #
 # Project home page:
 #       https://oneinstack.com
@@ -12,7 +12,7 @@ export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
 clear
 printf "
 #######################################################################
-#       OneinStack for CentOS/RedHat 6+ Debian 7+ and Ubuntu 12+      #
+#       OneinStack for CentOS/RedHat 6+ Debian 8+ and Ubuntu 14+      #
 #       For more information please visit https://oneinstack.com      #
 #######################################################################
 "
@@ -405,9 +405,9 @@ if [ ${ARG_NUM} == 0 ]; then
           echo -e "\t${CMSG} 2${CEND}. Install MySQL-5.7"
           echo -e "\t${CMSG} 3${CEND}. Install MySQL-5.6"
           echo -e "\t${CMSG} 4${CEND}. Install MySQL-5.5"
-          echo -e "\t${CMSG} 5${CEND}. Install MariaDB-10.3"
-          echo -e "\t${CMSG} 6${CEND}. Install MariaDB-10.2"
-          echo -e "\t${CMSG} 7${CEND}. Install MariaDB-10.1"
+          echo -e "\t${CMSG} 5${CEND}. Install MariaDB-10.4"
+          echo -e "\t${CMSG} 6${CEND}. Install MariaDB-10.3"
+          echo -e "\t${CMSG} 7${CEND}. Install MariaDB-10.2"
           echo -e "\t${CMSG} 8${CEND}. Install MariaDB-5.5"
           echo -e "\t${CMSG} 9${CEND}. Install Percona-8.0"
           echo -e "\t${CMSG}10${CEND}. Install Percona-5.7"
@@ -418,7 +418,7 @@ if [ ${ARG_NUM} == 0 ]; then
           echo -e "\t${CMSG}15${CEND}. Install MongoDB"
           read -e -p "Please input a number:(Default 2 press Enter) " db_option
           db_option=${db_option:-2}
-          [[ "${db_option}" =~ ^[1,5,9]$|^15$ ]] && [ "${OS_BIT}" == '32' ] && { echo "${CWARNING}By not supporting 32-bit! ${CEND}"; continue; }
+          [[ "${db_option}" =~ ^[1,5,6,9]$|^15$ ]] && [ "${OS_BIT}" == '32' ] && { echo "${CWARNING}By not supporting 32-bit! ${CEND}"; continue; }
           if [[ "${db_option}" =~ ^[1-9]$|^1[0-5]$ ]]; then
             if [ "${db_option}" == '14' ]; then
               [ -e "${pgsql_install_dir}/bin/psql" ] && { echo "${CWARNING}PostgreSQL already installed! ${CEND}"; unset db_option; break; }
@@ -463,7 +463,7 @@ if [ ${ARG_NUM} == 0 ]; then
                 if [[ ! ${dbinstallmethod} =~ ^[1-2]$ ]]; then
                   echo "${CWARNING}input error! Please only input number 1~2${CEND}"
                 else
-                  [ "${db_option}" == '5' -a "${LIBC_YN}" != '0' -a "${dbinstallmethod}" == '1' ] && { echo "${CWARNING}MariaDB-10.3 binaries require GLIBC 2.14 or higher! ${CEND}"; continue; }
+                  [[ "${db_option}" =~ ^[5-6]$ ]] && [ "${LIBC_YN}" != '0' -a "${dbinstallmethod}" == '1' ] && { echo "${CWARNING}MariaDB-10.3+ binaries require GLIBC 2.14 or higher! ${CEND}"; continue; }
                   break
                 fi
               done
@@ -771,7 +771,6 @@ if [ ! -e ~/.oneinstack ]; then
     "CentOS")
       installDepsCentOS 2>&1 | tee ${oneinstack_dir}/install.log
       . include/init_CentOS.sh 2>&1 | tee -a ${oneinstack_dir}/install.log
-      [ -n "$(gcc --version | head -n1 | grep '4\.1\.')" ] && export CC="gcc44" CXX="g++44"
       ;;
     "Debian")
       installDepsDebian 2>&1 | tee ${oneinstack_dir}/install.log
@@ -804,7 +803,7 @@ fi
 # Database
 case "${db_option}" in
   1)
-    [ "${OS}" == 'CentOS' -a "${CentOS_ver}" != '7' ] && dbinstallmethod=1
+    [ "${OS}" == 'CentOS' -a "${CentOS_ver}" != '7' ] && dbinstallmethod=1 && checkDownload
     . include/mysql-8.0.sh
     Install_MySQL80 2>&1 | tee -a ${oneinstack_dir}/install.log
     ;;
@@ -821,16 +820,16 @@ case "${db_option}" in
     Install_MySQL55 2>&1 | tee -a ${oneinstack_dir}/install.log
     ;;
   5)
+    . include/mariadb-10.4.sh
+    Install_MariaDB104 2>&1 | tee -a ${oneinstack_dir}/install.log
+    ;;
+  6)
     . include/mariadb-10.3.sh
     Install_MariaDB103 2>&1 | tee -a ${oneinstack_dir}/install.log
     ;;
-  6)
+  7)
     . include/mariadb-10.2.sh
     Install_MariaDB102 2>&1 | tee -a ${oneinstack_dir}/install.log
-    ;;
-  7)
-    . include/mariadb-10.1.sh
-    Install_MariaDB101 2>&1 | tee -a ${oneinstack_dir}/install.log
     ;;
   8)
     . include/mariadb-5.5.sh
