@@ -58,7 +58,7 @@ Install_MariaDB103() {
     fi
   else
     rm -rf ${mariadb_install_dir}
-    echo "${CFAILURE}MariaDB install failed, Please contact the author! ${CEND}"
+    echo "${CFAILURE}MariaDB install failed, Please contact the author! ${CEND}" && lsb_release -a
     kill -9 $$
   fi
 
